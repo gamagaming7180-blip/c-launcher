@@ -1,0 +1,57 @@
+* {
+    base:     #1e1e2ee0;
+    surface:  #313244;
+    text:     #cdd6f4;
+    subtext:  #a6adc8;
+    mauve:    #ef9faf;
+    blue:     #eba684;
+
+    background-color: transparent;
+    text-color: @text;
+    margin: 0;
+    padding: 0;
+    spacing: 0;
+}
+
+window {
+    location: center;
+    anchor: center;
+    width: 580px;
+    background-color: @base;
+    border: 2px;
+    border-color: @mauve;
+    border-radius: 26px;
+}
+
+mainbox { padding: 16px; spacing: 12px; children: [ inputbar, listview ]; }
+
+inputbar {
+    padding: 11px 18px;
+    spacing: 12px;
+    background-color: @surface;
+    border: 1px;
+    border-color: @blue;
+    border-radius: 20px;
+    children: [ textbox-search, entry ];
+}
+textbox-search { expand: false; str: ""; text-color: @mauve; vertical-align: 0.5; }
+entry { placeholder: "Search apps"; placeholder-color: @subtext; vertical-align: 0.5; }
+
+listview {
+    lines: 8;
+    columns: 1;
+    fixed-height: true;
+    scrollbar: false;
+    spacing: 4px;
+}
+
+element {
+    padding: 9px 14px;
+    spacing: 14px;
+    border: 1px;
+    border-color: transparent;
+    border-radius: 18px;
+}
+element selected.normal { background-color: @surface; border-color: @mauve; text-color: @mauve; }
+element-icon { size: 28px; vertical-align: 0.5; }
+element-text { vertical-align: 0.5; text-color: inherit; }
