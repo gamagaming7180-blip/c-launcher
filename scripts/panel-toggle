@@ -1,0 +1,8 @@
+#!/bin/sh
+LOCK="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/hypr-rice-panel.lock"
+PANEL="$HOME/.config/hypr-rice/scripts/panel.py"
+if [ -r "$LOCK" ] && kill -0 "$(cat "$LOCK")" 2>/dev/null; then
+  kill -USR1 "$(cat "$LOCK")"
+else
+  exec python3 "$PANEL"
+fi

@@ -9,9 +9,10 @@ hl.config({
         sensitivity  = 0,
 
         touchpad = {
-            natural_scroll = true,
-            tap_to_click   = true,
+            natural_scroll       = true,
+            tap_to_click         = true,
             disable_while_typing = true,
+            clickfinger_behavior = true,   -- 2-finger click = right click, 3-finger = middle
         },
     },
 })

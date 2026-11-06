@@ -987,3 +987,21 @@ def css_colors():
     except OSError:
         extra = ""
     return base + extra + "\n"
+
+GAME_STATE = os.path.join(RUNTIME, "hypr-rice-gamemode.on")
+def gamemode_on(): return os.path.exists(GAME_STATE)
+def toggle_gamemode():
+    if gamemode_on():
+        try: os.remove(GAME_STATE)
+        except OSError: pass
+        sh(["hyprctl", "reload"], 3.0)
+        if have("makoctl"): sh(["makoctl", "mode", "-r", "dnd"], 2.0)
+        if have("powerprofilesctl"): sh(["powerprofilesctl", "set", "balanced"], 2.0)
+        notify("Game mode", "Off - animations and blur restored.")
+        return False
+    open(GAME_STATE, "w").write("1")
+    sh(["hyprctl", "--batch", "keyword animations:enabled 0; keyword decoration:blur:enabled 0; keyword decoration:shadow:enabled 0"], 3.0)
+    if have("makoctl"): sh(["makoctl", "mode", "-a", "dnd"], 2.0)
+    if have("powerprofilesctl"): sh(["powerprofilesctl", "set", "performance"], 2.0)
+    notify("Game mode", "On - blur/animations off, DND & performance active.")
+    return True

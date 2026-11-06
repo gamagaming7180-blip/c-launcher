@@ -1,0 +1,140 @@
+{
+    "custom/vesper-launcher": {"format": "▦", "tooltip": false, "on-click": "/home/gama/.config/vesper/launcher.sh"},
+    // Vesper: floating glass capsules. Event-driven; the few polling intervals are long on purpose.
+    // NOTE: scripts/panel.py, osd.py and media-card.py animate out of the clock capsule and assume it is
+    // about 165x30 px, 6 px from the top, centred. If you resize it in style.css, update PILL_W/H/Y there too.
+    "layer": "top",
+    "position": "top",
+    "height": 30,
+    "margin-top": 6,
+    "margin-left": 12,
+    "margin-right": 12,
+    "spacing": 0,
+    "reload_style_on_change": true,
+
+    "modules-left": [ "custom/vesper-launcher","hyprland/workspaces", "hyprland/window", "custom/media-equalizer"],
+    "modules-center": ["clock"],
+    "modules-right": ["tray", "custom/screenrecord", "group/controls", "group/sys", "battery", "custom/power"],
+
+    // Workspace look (dot / long pill) lives entirely in style.css; the label is just a blank.
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "format-icons": { "default": " ", "active": " ", "empty": " ", "urgent": " " },
+        "persistent-workspaces": { "*": 5 },
+        "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'",
+        "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'"
+    },
+
+    "hyprland/window": {
+        "format": "{title}",
+        "icon": true,
+        "icon-size": 16,
+        "max-length": 34,
+        "separate-outputs": true,
+        "rewrite": { "": "Desktop", ".*[Cc]laude.*": "Claude" }
+    },
+
+    "custom/media-equalizer": {
+        "exec": "$HOME/.config/hypr-rice/scripts/media-equalizer.py",
+        "return-type": "json",
+        "restart-interval": 3,
+        "hide-empty-text": true,
+        "on-click": "$HOME/.config/hypr-rice/scripts/media-card.py",
+        "tooltip": true,
+        "escape": true,
+        "max-length": 35
+    },
+
+    "clock": {
+        "format": "{:%H:%M  ·  %d %b}",
+        "tooltip": false,
+        "interval": 30,
+        "on-click": "~/.config/hypr-rice/scripts/panel-toggle.sh"
+    },
+
+    "tray": { "icon-size": 16, "spacing": 10 },
+
+    "custom/screenrecord": {
+        "format": "{text}",
+        "exec": "$HOME/.config/hypr-rice/scripts/screen-record-toggle.sh status",
+        "return-type": "json",
+        "interval": 5,
+        "signal": 8,
+        "hide-empty-text": true,
+        "on-click": "$HOME/.config/hypr-rice/scripts/screen-record-toggle.sh menu",
+        "tooltip": true
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-muted": "󰝟 muted",
+        "format-icons": { "default": ["󰕿", "󰖀", "󰕾"] },
+        "tooltip-format": "{desc}\n{volume}%  ·  scroll to change, right-click mutes, middle-click opens the mixer",
+        "on-click": "~/.config/hypr-rice/scripts/panel-toggle.sh",
+        "on-click-middle": "pavucontrol",
+        "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+        "scroll-step": 5
+    },
+
+    "backlight": {
+        "format": "󰃠 {percent}%",
+        "tooltip-format": "Brightness {percent}%  ·  scroll to adjust",
+        "on-click": "~/.config/hypr-rice/scripts/panel-toggle.sh",
+        "on-scroll-up": "brightnessctl set 5%+",
+        "on-scroll-down": "brightnessctl set 5%-"
+    },
+
+    "network": {
+        "format-wifi": "󰤨 {signalStrength}%",
+        "format-ethernet": "󰈀 wired",
+        "format-disconnected": "󰤭 offline",
+        "tooltip-format": "{essid}  {ipaddr}\n󰁅 {bandwidthDownBytes}  󰁝 {bandwidthUpBytes}",
+        "on-click": "~/.config/hypr-rice/scripts/panel-toggle.sh",
+        "on-click-right": "nm-connection-editor",
+        "interval": 10
+    },
+
+    // Volume / brightness / wifi in one capsule, CPU / RAM in another, battery on its own.
+    "group/controls": {
+        "orientation": "horizontal",
+        "modules": ["pulseaudio", "backlight", "network"]
+    },
+
+    // CPU % and RAM used in GB. Click either one for the full monitor.
+    "group/sys": {
+        "orientation": "horizontal",
+        "modules": ["cpu", "memory"]
+    },
+
+    "cpu": {
+        "format": "󰻠 {usage}%",
+        "interval": 5,
+        "tooltip": false,
+        "on-click": "~/.config/hypr-rice/scripts/sysmon-toggle.sh"
+    },
+
+    "memory": {
+        "format": "󰍛 {used:0.1f}G",
+        "interval": 10,
+        "tooltip-format": "RAM  {used:0.1f} / {total:0.1f} GiB ({percentage}%)\nSwap {swapUsed:0.1f} / {swapTotal:0.1f} GiB\nAvailable {avail:0.1f} GiB\n\nClick for details",
+        "on-click": "~/.config/hypr-rice/scripts/sysmon-toggle.sh"
+    },
+
+    "battery": {
+        "states": { "warning": 25, "critical": 12 },
+        "format": "{icon} {capacity}%",
+        "format-charging": "󰂄 {capacity}%",
+        "format-plugged": "󰚥 {capacity}%",
+        "format-full": "󰁹 {capacity}%",
+        "tooltip-format": "{capacity}%  ·  {timeTo}\nPower {power} W",
+        "on-click": "~/.config/hypr-rice/scripts/panel-toggle.sh",
+        "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+        "interval": 30
+    },
+
+    "custom/power": {
+        "format": "󰐥",
+        "tooltip": false,
+        "on-click": "$HOME/.config/hypr-rice/scripts/power-menu.sh"
+    }
+}

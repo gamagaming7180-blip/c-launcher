@@ -1,0 +1,146 @@
+@import "colors.css";   /* written by scripts/wallcolors.py: the palette follows the wallpaper */
+/* Vesper bar: floating tinted-glass capsules.
+     left   : workspace dots (the current one stretches into a glowing pill) | window title | media ticker
+     centre : clock island (the panel, OSD and media card all unfold from this)
+     right  : tray | rec | volume / brightness / wifi / cpu / ram / battery as one segmented capsule | power
+   Blur comes from the layer rule in modules/rules.lua; the capsules are translucent so it shows through. */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", "Symbols Nerd Font", "Noto Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    text-shadow: none;
+    background-image: none;
+    transition-property: background-color, border-color, color, min-width;
+    transition-duration: 180ms;
+}
+
+window#waybar { background-color: transparent; color: @text; }
+
+tooltip {
+    background-color: alpha(@glass, 0.95);
+    border: 1px solid alpha(@accent, 0.45);
+    border-radius: 14px;
+}
+tooltip label { color: @text; padding: 4px 8px; }
+
+/* ---- every capsule shares one glass recipe ---- */
+#workspaces, #window, #custom-media-equalizer, #clock, #tray, #custom-screenrecord,
+#controls, #sys, #battery, #custom-power {
+    background-color: alpha(@glass, 0.74);
+    border: 1px solid alpha(@text, 0.08);
+    color: @text;
+}
+
+/* ---- left: workspaces ---- */
+#workspaces { border-radius: 999px; padding: 0 8px; }
+#workspaces button {
+    min-width: 8px;
+    margin: 10px 4px;
+    padding: 0;
+    border-radius: 999px;
+    font-size: 0;
+    color: transparent;
+    background-color: alpha(@subtext, 0.55);
+}
+#workspaces button.empty    { background-color: alpha(@subtext, 0.22); }
+#workspaces button.active   {
+    min-width: 30px;
+    background-image: linear-gradient(to right, @accent, @accent2);
+    box-shadow: 0 0 9px alpha(@accent, 0.55);
+}
+#workspaces button.urgent   { background-color: @red; }
+#workspaces button:hover    { background-color: @text; }
+
+/* ---- left: window title ---- */
+#window { margin-left: 6px; padding: 0 16px 0 12px; border-radius: 999px; }
+window#waybar.empty #window { color: alpha(@text, 0.55); }
+
+/* ---- left: media ticker (hidden when nothing plays) ---- */
+#custom-media-equalizer {
+    margin-left: 6px;
+    padding: 0 12px;
+    border-radius: 999px;
+    color: @accent;
+    border-color: alpha(@accent, 0.30);
+}
+#custom-media-equalizer.playing {
+    color: @accent2;
+    background-color: alpha(@accent, 0.20);
+    border-color: alpha(@accent, 0.55);
+}
+#custom-media-equalizer.paused  { color: alpha(@text, 0.60); }
+#custom-media-equalizer:hover   { background-color: alpha(@accent, 0.28); border-color: alpha(@accent, 0.80); }
+#custom-media-equalizer.hidden  {
+    color: transparent;
+    background-color: transparent;
+    border-color: transparent;
+    padding: 0;
+    margin: 0;
+    min-width: 0;
+}
+
+/* ---- centre: clock island ---- */
+#clock {
+    font-weight: 800;
+    min-width: 127px;
+    padding: 0 18px;
+    border-radius: 999px;
+    background-color: alpha(@island, 0.94);
+    border-color: alpha(@accent, 0.32);
+}
+#clock:hover { border-color: alpha(@accent, 0.85); }
+
+/* ---- right: tray + record ---- */
+#tray { margin-left: 6px; padding: 0 12px; border-radius: 999px; }
+#tray > .passive         { -gtk-icon-effect: dim; }
+#tray > .needs-attention { -gtk-icon-effect: highlight; }
+
+#custom-screenrecord {
+    margin-left: 6px;
+    padding: 0 12px;
+    border-radius: 999px;
+    color: @accent;
+    background-color: alpha(@accent, 0.14);
+    border-color: alpha(@accent, 0.40);
+}
+#custom-screenrecord:hover { background-color: alpha(@accent, 0.26); border-color: alpha(@accent, 0.78); }
+#custom-screenrecord.recording { color: @red; background-color: alpha(@red, 0.20); border-color: alpha(@red, 0.80); }
+#custom-screenrecord.missing   { color: @subtext; background-color: alpha(@surface, 0.55); border-color: alpha(@text, 0.08); }
+
+/* ---- right: three roomy capsules (controls | cpu+ram | battery), same gaps as the left side ---- */
+#controls, #sys { margin-left: 6px; padding: 0 5px; border-radius: 999px; }
+#battery        { margin-left: 6px; padding: 0 14px; border-radius: 999px; }
+
+/* each reading is a soft pill that lights up on hover */
+#pulseaudio, #backlight, #network, #cpu, #memory {
+    margin: 3px 0;
+    padding: 0 10px;
+    border-radius: 999px;
+    color: @text;
+}
+#pulseaudio.muted { color: alpha(@text, 0.45); }
+#pulseaudio:hover, #backlight:hover, #network:hover, #cpu:hover, #memory:hover,
+#battery:hover { background-color: alpha(@accent, 0.20); }
+
+#battery.charging, #battery.plugged { color: @green; }
+#battery.warning:not(.charging)     { color: @yellow; }
+#battery.critical:not(.charging)    { color: @red; background-color: alpha(@red, 0.20); }
+
+/* ---- right: power ---- */
+#custom-power {
+    margin-left: 6px;
+    min-width: 28px;
+    padding: 0;
+    border-radius: 999px;
+    color: @red;
+    background-color: alpha(@red, 0.22);
+    border-color: alpha(@red, 0.30);
+}
+#custom-power:hover { background-color: alpha(@red, 0.32); border-color: alpha(@red, 0.75); }

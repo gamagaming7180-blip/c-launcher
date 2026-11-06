@@ -1,3 +1,19 @@
-/* written by wallcolors.py: follows the wallpaper */
-@define-color accent  #ef9faf;
-@define-color accent2 #eba684;
+/* Vesper palette. Written by scripts/wallcolors.py from the wallpaper. Do not edit: edit templates/colors.css.tpl. */
+@define-color accent    #efcf9f;
+@define-color accent2   #ddeb84;
+@define-color accent3   #f9e5c8;
+@define-color island    #0a0806;
+@define-color mantle    #0d0b07;
+@define-color base      #14100b;
+@define-color glass     #1a140d;
+@define-color surface   #251f16;
+@define-color surface2  #362d21;
+@define-color overlay   #594f40;
+@define-color text      #f4efe6;
+@define-color subtext   #c0b5a5;
+@define-color red       #ff7d96;
+@define-color green     #8fe3a8;
+@define-color yellow    #f5d58a;
+/* names the panel / OSD / media card already know */
+@define-color surface0  #251f16;
+@define-color surface1  #362d21;

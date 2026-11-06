@@ -1,4 +1,5 @@
 -- Keybinds. SUPER is the main modifier.
+-- Vesper binds. Same muscle memory as before, plus a few new ones (see the "new in Vesper" block).
 -- Binds must never block: external work goes through hl.dsp.exec_cmd.
 
 local mod = "SUPER"
@@ -7,8 +8,15 @@ local rice = os.getenv("HOME") .. "/.config/hypr-rice"
 local terminal    = "kitty --config " .. rice .. "/kitty/kitty.conf"
 local fileManager = "thunar"
 local browser     = "firefox"
-local rofi        = "rofi -config " .. rice .. "/rofi/config.rasi -theme " .. rice .. "/rofi/catppuccin.rasi"
-local launcher    = rofi .. " -show drun"
+local rofi        = "rofi -config " .. rice .. "/rofi/config.rasi -theme " .. rice .. "/rofi/vesper.rasi"        -- list style (dmenu, clipboard, windows)
+local launcher    = "rofi -config " .. rice .. "/rofi/config.rasi -theme " .. rice .. "/rofi/vesper-grid.rasi -show drun"   -- touch-friendly app grid
+
+-- Palette written by scripts/wallcolors.py (used for the screenshot selector below)
+local pal = { accent = "c4a7ff", mantle = "0d0b12" }
+pcall(function()
+    local ok, c = pcall(dofile, rice .. "/generated/colors.lua")
+    if ok and type(c) == "table" then for k, v in pairs(c) do pal[k] = v end end
+end)
 local lock        = "hyprlock -c " .. rice .. "/hyprlock.conf"
 
 ---------------------------------------------------------------- apps
@@ -80,7 +88,7 @@ hl.bind(mod .. " + SHIFT + S", hl.dsp.window.move({ workspace = "special:magic" 
 ---------------------------------------------------------------- screenshots
 local shots = "$HOME/Pictures/Screenshots"
 hl.bind("Print",
-    hl.dsp.exec_cmd("mkdir -p " .. shots .. " && grim -g \"$(slurp -b 1e1e2e99 -c cba6f7ff -w 2)\" - | tee " .. shots .. "/$(date +%F_%H-%M-%S).png | wl-copy && notify-send -t 2000 'Screenshot' 'Region copied + saved'"))
+    hl.dsp.exec_cmd("mkdir -p " .. shots .. " && grim -g \"$(slurp -b " .. pal.mantle .. "99 -c " .. pal.accent .. "ff -w 2)\" - | tee " .. shots .. "/$(date +%F_%H-%M-%S).png | wl-copy && notify-send -t 2000 'Screenshot' 'Region copied + saved'"))
 hl.bind("SHIFT + Print",
     hl.dsp.exec_cmd("mkdir -p " .. shots .. " && grim - | tee " .. shots .. "/$(date +%F_%H-%M-%S).png | wl-copy && notify-send -t 2000 'Screenshot' 'Screen copied + saved'"))
 
@@ -101,7 +109,19 @@ hl.bind("XF86AudioPrev",  hl.dsp.exec_cmd("playerctl previous"),   { locked = tr
 hl.bind("XF86AudioPlay",  hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 hl.bind("XF86AudioPause", hl.dsp.exec_cmd("playerctl play-pause"), { locked = true })
 
+---------------------------------------------------------------- new in Vesper
+hl.bind(mod .. " + F1",         hl.dsp.exec_cmd(rice .. "/scripts/keys.sh"))                         -- keybind cheat sheet
+hl.bind(mod .. " + SHIFT + B",  hl.dsp.exec_cmd(rice .. "/scripts/restart-rice-waybar.sh"))          -- restart the bar
+hl.bind(mod .. " + SHIFT + C",  hl.dsp.exec_cmd("hyprpicker -a || notify-send 'Colour picker' 'Install hyprpicker'")) -- pick a colour -> clipboard
+hl.bind(mod .. " + ALT + K",    hl.dsp.exec_cmd("pkill -RTMIN wvkbd-mobintl || wvkbd-mobintl -L 280"))  -- on-screen keyboard (tablet mode)
+hl.bind(mod .. " + SHIFT + D",  hl.dsp.exec_cmd(rice .. "/scripts/rice-doctor.sh"))                  -- health check
+
 -- HYPR_RICE_SCREEN_RECORDING_V1_BEGIN
 -- SUPER+ALT+R toggles screen recording; the top Waybar button does the same.
 hl.bind(mod .. " + ALT + R", hl.dsp.exec_cmd(rice .. "/scripts/screen-record-toggle.sh toggle"))
 -- HYPR_RICE_SCREEN_RECORDING_V1_END
+
+-- VESPER_TOUCH_FIX_BEGIN
+-- SUPER+ALT+T flips tablet / laptop mode (SUPER+ALT+K already shows the on-screen keyboard)
+hl.bind(mod .. " + ALT + T", hl.dsp.exec_cmd("python3 " .. os.getenv("HOME") .. "/.config/vesper/vesper-touch.py toggle"))
+-- VESPER_TOUCH_FIX_END

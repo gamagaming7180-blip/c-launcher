@@ -14,4 +14,12 @@ hl.on("hyprland.start", function()
     -- Clipboard history (text + images). Pick with SUPER + V.
     hl.exec_cmd("wl-paste --type text  --watch cliphist store")
     hl.exec_cmd("wl-paste --type image --watch cliphist store")
+
+    -- GTK apps follow the dark look (harmless if gsettings or the icon theme is missing)
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme prefer-dark")
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface icon-theme Papirus-Dark")
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface cursor-theme Bibata-Modern-Ice")
+
+    -- 2-in-1: rotate the screen with the accelerometer, if iio-hyprland is installed
+    -- disabled by vesper-touch fix (the daemon rotates the screen): hl.exec_cmd("command -v iio-hyprland >/dev/null && iio-hyprland")
 end)

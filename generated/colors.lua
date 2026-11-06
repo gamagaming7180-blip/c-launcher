@@ -1,1 +1,18 @@
-return { accent = "ef9faf", accent2 = "eba684" }
+return {
+  accent = "efcf9f",
+  accent2 = "ddeb84",
+  accent3 = "f9e5c8",
+  base = "14100b",
+  black = "000000",
+  glass = "1a140d",
+  green = "8fe3a8",
+  island = "0a0806",
+  mantle = "0d0b07",
+  overlay = "594f40",
+  red = "ff7d96",
+  subtext = "c0b5a5",
+  surface = "251f16",
+  surface2 = "362d21",
+  text = "f4efe6",
+  yellow = "f5d58a",
+}

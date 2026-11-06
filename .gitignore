@@ -1,4 +1,8 @@
 __pycache__/
 *.pyc
-*.bak
-*.orig
+backup-*/
+backups/
+*.bak*
+*.old*
+*.backup*
+*.missing
